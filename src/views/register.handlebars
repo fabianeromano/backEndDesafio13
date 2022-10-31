@@ -1,0 +1,42 @@
+<h1>Registro de Usuario</h1>
+<form id="login-form" method="POST">
+  <div>
+    <label for="username">Ingrese su username</label>
+    <input type="text" name="username" id="username" />
+    {{#if errors}}
+    <p style="color:red">{{errors.username}}</p>
+    {{/if}}
+  </div>
+  <div>
+    <label for="firstName">Ingrese su Nombre</label>
+    <input type="text" name="firstName" id="firstName" />
+    {{#if errors}}
+    <p style="color:red">{{errors.firstName}}</p>
+    {{/if}}
+  </div>
+  <div>
+    <label for="lastName">Ingrese su Apellido</label>
+    <input type="text" name="lastName" id="lastName" />
+    {{#if errors}}
+    <p style="color:red">{{errors.lastName}}</p>
+    {{/if}}
+  </div>
+  <div>
+    <label for="email">Ingrese su email</label>
+    <input type="email" name="email" id="email" />
+    {{#if errors}}
+    <p style="color:red">{{errors.email}}</p>
+    {{/if}}
+  </div>
+  <div>
+    <label for="password">Ingrese su contraseña</label>
+    <input type="password" name="password" id="password" />
+  </div>
+  <button type="submit" name="save" id="save">Enviar</button>
+</form>
+
+<script type="text/javascript">
+
+</script>
+
+<a href="/login">Login</a>

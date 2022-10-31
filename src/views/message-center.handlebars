@@ -1,0 +1,75 @@
+<h1>Centro de Mesajes <span id="compression">0</span></h1>
+
+<input type="email" name="email" id="email" placeholder="nombre@email.com" />
+<input type="text" name="nombre" id="nombre" placeholder="Ingresa tu Nombre" />
+<input type="text" name="apellido" id="apellido" placeholder="Ingresa tu Apellido" />
+<input type="text" name="edad" id="edad" placeholder="Ingresa tu Edad" />
+<input type="text" name="alias" id="alias" placeholder="Ingresa tu alias" />
+<input type="text" name="avatar" id="avatar" placeholder="Url de tu avatar" />
+
+<div>
+  <ul id="messages"></ul>
+</div>
+
+<form id="message-form">
+  <input type="text" name="message" id="message" placeholder="Ingresá un mensaje..." />
+  <button type="submit" name="send" id="send">Enviar</button>
+</form>
+
+
+<script type="text/javascript">
+  var socket = io();
+  const form = document.getElementById("message-form");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const emailValue = document.getElementById("email").value;
+    const messageValue = document.getElementById("message").value;
+    if (emailValue !== "" && messageValue !== "") {
+      const now = new Date();
+      const messsage = {
+        author: {
+          email: emailValue,
+          nombre: document.getElementById("nombre").value,
+          apellido: document.getElementById("apellido").value,
+          edad: document.getElementById("edad").value,
+          alias: document.getElementById("alias").value,
+          avatar: document.getElementById("avatar").value,
+        },
+        text: messageValue,
+        datetime: `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`,
+      }
+      socket.emit("new-message", messsage);
+    }
+    return false;
+  });
+  socket.on('messages', (productos) => {
+    const vistaMensajes = document.getElementById('messages');
+    const authorSchema = new normalizr.schema.Entity("author", {}, { idAttribute: "email" });
+    const message = new normalizr.schema.Entity('messages', {
+      author: authorSchema,
+    });
+    const messageSchema = { messages: [message] };
+
+    fetch('/messages')
+      .then(res => res.json())
+      .then(({ messages: data, compression }) => {
+        const denormalizedData = normalizr.denormalize(data.result, messageSchema, data.entities);
+        document.getElementById("compression").innerHTML = `(Compresión: ${Math.round(compression * 100,2)}%)`;
+        denormalizedData.messages.forEach(msg => {
+          const li = document.createElement('li');
+          li.style.display = 'flex';
+          li.innerHTML = `    
+            <div style="font-weight: bold; color: blue;">${msg.author.email}</div>
+            <div style="margin-left:2px; font-weight: normal; color: brown;">[${msg.datetime}]</div>	
+            <div	
+              style="margin-left:2px; font-weight: normal; font-style:italic; color: green;"	
+            >${msg.text}</div>
+            <img src="${msg.author.avatar}" width="32px" height="32px"/>
+          `;
+          vistaMensajes.appendChild(li);
+        })
+      })
+  })	
+</script>
+
+<a href="/">Home</a>

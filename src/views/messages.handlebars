@@ -1,0 +1,13 @@
+<ul>	
+  {{#if hasMessages}}	
+  {{#each messages}}	
+    <li style="display: flex">	
+      <div style="font-weight: bold; color: blue;">{{this.email}}</div>	
+      <div style="margin-left:2px; font-weight: normal; color: brown;">[{{this.datetime}}]</div>	
+      <div	
+        style="margin-left:2px; font-weight: normal; font-style:italic; color: green;"	
+      >{{this.message}}</div>	
+    </li>	
+  {{/each}}	
+  {{/if}}	
+</ul>

@@ -1,0 +1,24 @@
+<h1>Login de Usuario</h1>
+<form id="login-form" method="POST">
+  <div>
+    <label for="username">Ingrese su username</label>
+    <input type="text" name="username" id="username" />
+    {{#if errors?.username}}
+    <p style="color:red">{{errors.username}}</p>
+    {{/if}}
+  </div>
+  <div>
+    <label for="password">Ingrese su contraseña</label>
+    <input type="password" name="password" id="password" />
+    {{#if errors?.password}}
+    <p style="color:red">{{errors.password}}</p>
+    {{/if}}
+  </div>
+  <button type="submit" name="save" id="save">Enviar</button>
+</form>
+
+<script type="text/javascript">
+
+</script>
+
+<a href="/register">Register</a>

@@ -1,0 +1,40 @@
+<h1>Ingrese Producto</h1>	
+{{#if username}}	
+<p>Hola, {{ username }}</p>
+{{/if}}
+<form id="product-form">	
+  <label for="title">Nombre</label>	
+  <input type="text" name="title" id="title" />	
+  <label for="price">Precio</label>	
+  <input type="number" name="price" id="price" />	
+  <label for="thumbnail">Foto URL</label>	
+  <input type="text" name="thumbnail" id="thumbnail" />	
+  <button type="submit" name="save" id="save">Enviar</button>	
+</form>	
+
+<div id="productos"></div>	
+
+<script type="text/javascript">	
+  var socket = io();	
+  const form = document.getElementById("product-form");	
+  form.addEventListener("submit", function(e){	
+    e.preventDefault();	
+    const producto = {	
+      title: document.getElementById("title").value,	
+      price: document.getElementById("price").value,	
+      thumbnail: document.getElementById("thumbnail").value,	
+    }	
+    socket.emit("new-product", producto);	
+    return false;	
+  });	
+  socket.on('productos', (productos) => {	
+    const vistaProductos = document.getElementById('productos');	
+    fetch('/productos')	
+    .then(res => res.text())	
+    .then(vista => {	
+      vistaProductos.innerHTML = vista	
+    })	
+  })	
+</script>	
+
+<a href="/message-center">Mensajes</a>
